@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: #cfdeed;
+      min-height: 100vh;
+    }
+
+    .dashboard {
+      display: flex;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 250px;
+      height: 100vh;
+      background: #133fa8;
+      color: white;
+      padding: 30px;
+    }
+
+    .sidebar h2 {
+      font-size: 28px;
+      margin-bottom: 10px;
+    }
+
+    .sidebar p {
+      color: #94a3b8;
+      margin-bottom: 30px;
+    }
+
+    .sidebar hr {
+      border: 0;
+      border-top: 1px solid #334155;
+      margin-bottom: 25px;
+    }
+
+    .sidebar a {
+      display: block;
+      text-decoration: none;
+      color: white;
+      padding: 12px;
+      margin-bottom: 15px;
+      border-radius: 10px;
+      transition: .3s;
+    }
+
+    .sidebar a:hover {
+      background: #2563eb;
+    }
+
+    /* Content */
+    .content {
+      flex: 1;
+      padding: 40px;
+    }
+
+    .content h1 {
+      color: #0f172a;
+      font-size: 32px;
+      margin-bottom: 30px;
+    }
+
+    /* Cards */
+    .cards {
+      display: flex;
+      gap: 20px;
+      margin: 25px 0;
+    }
+
+    .card {
+      background: white;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,.15);
+      flex: 1;
+      text-align: center;
+    }
+
+    .card h3 {
+      color: #64748b;
+    }
+
+    .card p {
+      font-size: 40px;
+      font-weight: bold;
+      color: #2563eb;
+      margin-top: 10px;
+    }
+
+    /* Status Labels */
+    .OPEN {
+      background: #22c55e;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    .IN\ PROGRESS {
+      background: #f59e0b;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    .RESOLVED {
+      background: #2563eb;
+      color: white;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-weight: bold;
+    }
+
+    /* Buttons */
+    button {
+      background: #2563eb;
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+    }
+
+    /* Filters */
+    .filters {
+      margin: 20px 0;
+    }
+
+    .filters a {
+      margin-right: 15px;
+      text-decoration: none;
+      color: #2563eb;
+      font-weight: bold;
+    }
+
+    .filters a:hover {
+      text-decoration: underline;
+    }
+
+    form input[type="text"] {
+      padding: 8px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      margin-right: 10px;
+    }
+
+    /* Scrollable Table */
+    .table-box {
+      margin-top: 30px;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 25px rgba(0,0,0,.1);
+      overflow: hidden;
+    }
+
+    .table-container {
+      max-height: 300px; /* Fixed height */
+      overflow-y: auto;  /* Scroll vertically */
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background: #2563eb;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      position: sticky;
+      top: 0; /* Keep header fixed */
+    }
+
+    td {
+      padding: 15px;
+      border-bottom: 1px solid #e2e8f0;
+      text-align: center;
+    }
+
+    tr:hover {
+      background: #f8fafc;
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <h2>IT Helpdesk</h2>
+      <p>Admin Panel</p>
+      <hr>
+      <a href="/admin">Dashboard</a>
+      <a href="/logout">Logout</a>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+      <h1>Ticket Dashboard</h1>
+
+      <!-- Cards -->
+      <div class="cards">
+        <div class="card"><h3>Total Tickets</h3><p th:text="${total}">0</p></div>
+        <div class="card"><h3>Open</h3><p th:text="${open}">0</p></div>
+        <div class="card"><h3>Resolved</h3><p th:text="${resolved}">0</p></div>
+        <div class="card"><h3>High Priority</h3><p th:text="${high}">0</p></div>
+      </div>
+
+      <!-- Filters -->
+      <div class="filters">
+        <a href="/admin?filter=ALL">All</a>
+        <a href="/admin?filter=OPEN">Open</a>
+        <a href="/admin?filter=IN PROGRESS">In Progress</a>
+        <a href="/admin?filter=RESOLVED">Resolved</a>
+        <a href="/admin?filter=HIGH">High Priority</a>
+      </div>
+
+      <!-- Search -->
+      <form action="/admin" method="get">
+        <input type="text" name="search" placeholder="Search ticket...">
+        <button type="submit">Search</button>
+      </form>
+
+      <!-- Scrollable Table -->
+      <div class="table-box">
+        <div class="table-container">
+          <table>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Problem</th>
+              <th>Category</th>
+              <th>Priority</th>
+              <th>Status</th>
+              <th>Technician</th>
+              <th>Update</th>
+              <!--<th>Resolve</th>-->
+            </tr>
+            <tr th:each="ticket : ${tickets}">
+              <td th:text="${ticket.id}"></td>
+              <td th:text="${ticket.name}"></td>
+              <td th:text="${ticket.problem}"></td>
+              <td th:text="${ticket.category}"></td>
+              <td th:text="${ticket.priority}"></td>
+              <td><span th:text="${ticket.status}" th:class="${ticket.status}"></span></td>
+              <td th:text="${ticket.assignedTechnician}"></td>
+              <td>
+                <form action="/update" method="post">
+                  <input type="hidden" name="id" th:value="${ticket.id}">
+                  <select name="status">
+                    <option value="OPEN">OPEN</option>
+                    <option value="IN PROGRESS">IN PROGRESS</option>
+                    <!--<option value="RESOLVED">RESOLVED</option>-->
+                  </select>
+                  <input type="hidden" name="team" th:value="${ticket.assignedTeam}">
+                  <select name="technician">
+
+                    <option value="tech">
+                            tech
+                    </option>
+
+                  </select>
+                  <button type="submit">Assign</button>
+                </form>
+              </td>
+              <!--<td>
+                <form action="/resolve" method="post">
+                  <input type="hidden" name="id" th:value="${ticket.id}">
+                  <button type="submit">Resolve</button>
+                </form>
+              </td>-->
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

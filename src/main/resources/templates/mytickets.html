@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Tickets</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: #9ac0e6;
+      padding: 40px;
+    }
+
+    .box {
+      background: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.15);
+    }
+
+    h2 {
+      color: #0f466d; /* Updated theme color */
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .table-container {
+      max-height: 350px; /* Scrollable height */
+      overflow-y: auto;
+      border-radius: 10px;
+      box-shadow: inset 0 0 5px rgba(0,0,0,.1);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background: #1788E1;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      position: sticky;
+      top: 0; /* Sticky header */
+    }
+
+    td {
+      padding: 15px;
+      border-bottom: 1px solid #ddd;
+      text-align: center;
+    }
+
+    tr:hover {
+      background: #f8fafc;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>My Tickets</h2>
+
+    <div class="table-container">
+      <table>
+        <tr>
+          <th>ID</th>
+          <th>Problem</th>
+          <th>Category</th>
+          <th>Priority</th>
+          <th>Status</th>
+          <th>AI Suggestion</th>
+        </tr>
+
+        <tr th:each="ticket : ${tickets}">
+          <td th:text="${ticket.id}"></td>
+          <td th:text="${ticket.problem}"></td>
+          <td th:text="${ticket.category}"></td>
+          <td th:text="${ticket.priority}"></td>
+          <td th:text="${ticket.status}"></td>
+          <td th:text="${ticket.aiSuggestion}"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

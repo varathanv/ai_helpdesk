@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Technician Dashboard</title>
+<style>
+* {
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI',sans-serif;
+}
+
+body {
+  min-height:100vh;
+  background:linear-gradient(135deg,#01309e,#6a92e9);
+  padding:40px;
+}
+
+.dashboard {
+  background:#f8fafc;
+  border-radius:20px;
+  padding:30px;
+  box-shadow:0 20px 40px rgba(0,0,0,.25);
+}
+
+.header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:30px;
+}
+
+.header h1 {
+  color:#0f172a;
+}
+
+.logout {
+  background:#ef4444;
+  color:white;
+  padding:10px 20px;
+  border-radius:10px;
+  text-decoration:none;
+}
+
+.card {
+  background:white;
+  padding:20px;
+  border-radius:15px;
+  box-shadow:0 10px 25px rgba(0,0,0,.1);
+}
+
+/* Scrollable table container */
+.table-container {
+  max-height:400px; /* adjust as needed */
+  overflow-y:auto;
+  border-radius:10px;
+  border:1px solid #e2e8f0;
+}
+
+table {
+  width:100%;
+  border-collapse:collapse;
+}
+
+th {
+  background:#2563eb;
+  color:white;
+  padding:14px;
+  position:sticky;
+  top:0; /* keeps header visible while scrolling */
+}
+
+td {
+  padding:14px;
+  text-align:center;
+  border-bottom:1px solid #e2e8f0;
+}
+
+.status {
+  background:#f59e0b;
+  color:white;
+  padding:6px 12px;
+  border-radius:20px;
+  font-weight:bold;
+}
+
+button {
+  background:#22c55e;
+  color:white;
+  border:none;
+  padding:10px 18px;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+button:hover {
+  background:#16a34a;
+}
+</style>
+</head>
+<body>
+<div class="dashboard">
+  <div class="header">
+    <h1>Technician Panel</h1>
+    <a href="/login" class="logout">Logout</a>
+  </div>
+
+  <div class="card">
+    <h2>Assigned Tickets</h2>
+
+    <div class="table-container">
+      <table>
+        <tr>
+          <th>ID</th>
+          <th>Problem</th>
+          <th>Category</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+
+        <tr th:each="ticket:${tickets}">
+          <td th:text="${ticket.id}"></td>
+          <td th:text="${ticket.problem}"></td>
+          <td th:text="${ticket.category}"></td>
+          <td><span class="status" th:text="${ticket.status}"></span></td>
+          <td>
+            <form action="/technician/resolve" method="post">
+              <input type="hidden" name="id" th:value="${ticket.id}">
+              <button>Resolve</button>
+            </form>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+</body>
+</html>
